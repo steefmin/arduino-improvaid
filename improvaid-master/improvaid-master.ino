@@ -1,4 +1,11 @@
 #include <VirtualWire.h> // Download at https://www.pjrc.com/teensy/td_libs_VirtualWire.html
+#include "accelerometer.h"
+//accelerometer functionality
+const int groundpin = 14;             // analog input pin 4 -- ground
+const int powerpin = 18;              // analog input pin 5 -- voltage
+const int xpin = A3;                  // x-axis of the accelerometer
+const int ypin = A2;                  // y-axis
+const int zpin = A1;                  // z-axis (only on 3-axis models)
 
 //left-right oscillation functionality
 double part=0.5;
@@ -42,6 +49,9 @@ void setup(){
         vw_set_ptt_inverted(true);                      // Required for DR3100
         vw_setup(2000);                                 // Bits per sec
         vw_rx_start();                                  // Start receiver
+
+    //initialize accelerometer
+        accinit();
         
     //enable LED's
         Serial.println("Resetting outputs...");
@@ -187,5 +197,6 @@ void loop() {
         testtime=updatetime(part,interval,counter);
         counter = ledblink(counter);
     }
+    accread();
 }
 
