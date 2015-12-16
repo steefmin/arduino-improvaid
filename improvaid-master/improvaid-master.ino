@@ -6,6 +6,10 @@ const int powerpin = 18;              // analog input pin 5 -- voltage
 const int xpin = A3;                  // x-axis of the accelerometer
 const int ypin = A2;                  // y-axis
 const int zpin = A1;                  // z-axis (only on 3-axis models)
+int calibx = 0;
+int caliby = 0;
+int calibz = 0;
+int calibxyz = 0;
 
 //left-right oscillation functionality
 double part=0.5;
@@ -42,6 +46,7 @@ void setup(){
     //enable chat
         Serial.begin(9600);                             // Start serial monitor connection
         Serial.println(".__                                         .__    .___\n|__| _____ _____________  _______  _______  |__| __| _/\n|  |/     \\\\____ \\_  __ \\/  _ \\  \\/ /\\__  \\ |  |/ __ | \n|  |  Y Y  \\  |_> >  | \\(  <_> )   /  / __ \\|  / /_/ | \n|__|__|_|  /   __/|__|   \\____/ \\_/  (____  /__\\____ | \n         \\/|__|                           \\/        \\/ \n\n  _____ _____    _______/  |_  ___________\n /     \\\\__  \\  /  ___/\\   __\\/ __ \\_  __ \\\n|  Y Y  \\/ __ \\_\\___ \\  |  | \\  ___/|  | \\/\n|__|_|  (____  /____  > |__|  \\___  >__|   \n      \\/     \\/     \\/            \\/       \n                   .___    .__          \n  _____   ____   __| _/_ __|  |   ____  \n /     \\ /  _ \\ / __ |  |  \\  | _/ __ \\ \n|  Y Y  (  <_> ) /_/ |  |  /  |_\\  ___/ \n|__|_|  /\\____/\\____ |____/|____/\\___  >\n      \\/            \\/               \\/ ");
+        delay(300);
         Serial.println("Initializing...");
         vw_set_tx_pin(transmit_pin);
         vw_set_rx_pin(receive_pin);
@@ -49,9 +54,23 @@ void setup(){
         vw_set_ptt_inverted(true);                      // Required for DR3100
         vw_setup(2000);                                 // Bits per sec
         vw_rx_start();                                  // Start receiver
+        delay(700);
 
     //initialize accelerometer
-        accinit();
+        accinit(groundpin, powerpin);
+        delay(1000);
+        calibx = 360;
+        caliby = 360;
+        calibz = 360;
+        calibxyz = sqrt(3*360^2);
+        Serial.print("Accelerometer calibrated: x=");
+        Serial.print(calibx);
+        Serial.print(", y=");
+        Serial.print(caliby);
+        Serial.print(", z=");
+        Serial.print(calibz);
+        Serial.print('\n');
+        delay(800);
         
     //enable LED's
         Serial.println("Resetting outputs...");
@@ -197,6 +216,21 @@ void loop() {
         testtime=updatetime(part,interval,counter);
         counter = ledblink(counter);
     }
-    accread();
+//  accread(xpin,ypin,zpin,calibx,caliby,calibz);
+//  Serial.println(accvalue(xpin,ypin,zpin,calibx,caliby,calibz));
+  int eval1=accvalue(xpin,ypin,zpin,calibx,caliby,calibz);
+  if(eval1>15){
+      setled('4');
+      Serial.println(eval1);
+      accread(xpin,ypin,zpin,calibx,caliby,calibz);
+  }else if(eval1>10){
+      setled('3');
+      Serial.println(eval1);
+      accread(xpin,ypin,zpin,calibx,caliby,calibz);
+  }else if(eval1>5){
+      setled('2');
+      Serial.println(eval1);
+      accread(xpin,ypin,zpin,calibx,caliby,calibz);
+  }
 }
 
