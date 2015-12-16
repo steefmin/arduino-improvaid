@@ -71,11 +71,9 @@ void setup(){
         Serial.println("Ready");
 }
 void reset() {
-    digitalWrite(led_pin1,LOW);
-    digitalWrite(led_pin2,LOW);
-    digitalWrite(led_pin3,LOW);
-    digitalWrite(led_pin4,LOW);
-    digitalWrite(led_pin5,LOW);
+    for (int thisPin = led_pin1; thisPin <= led_pin5; thisPin++) {
+        digitalWrite(thisPin, LOW);
+    }
     sendchar('+');
     part = part0;
     interval = interval0;
