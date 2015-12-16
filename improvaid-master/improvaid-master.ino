@@ -34,24 +34,24 @@ const int led_pin5=7;
 void setup(){
     //enable chat
         Serial.begin(9600);                             // Start serial monitor connection
-Serial.println(".__                                         .__    .___");
-Serial.println("|__| _____ _____________  _______  _______  |__| __| _/");
-Serial.println("|  |/     \\\\____ \\_  __ \\/  _ \\  \\/ /\\__  \\ |  |/ __ | ");
-Serial.println("|  |  Y Y  \\  |_> >  | \\(  <_> )   /  / __ \\|  / /_/ | ");
-Serial.println("|__|__|_|  /   __/|__|   \\____/ \\_/  (____  /__\\____ | ");
-Serial.println("         \\/|__|                           \\/        \\/ ");
-Serial.println("                         __                ");
-Serial.println("  _____ _____    _______/  |_  ___________ ");
-Serial.println(" /     \\\\__  \\  /  ___/\\   __\\/ __ \\_  __ \\");
-Serial.println("|  Y Y  \\/ __ \\_\\___ \\  |  | \\  ___/|  | \\/");
-Serial.println("|__|_|  (____  /____  > |__|  \\___  >__|   ");
-Serial.println("      \\/     \\/     \\/            \\/       ");
-Serial.println("                   .___    .__          ");
-Serial.println("  _____   ____   __| _/_ __|  |   ____  ");
-Serial.println(" /     \\ /  _ \\ / __ |  |  \\  | _/ __ \\ ");
-Serial.println("|  Y Y  (  <_> ) /_/ |  |  /  |_\\  ___/ ");
-Serial.println("|__|_|  /\\____/\\____ |____/|____/\\___  >");
-Serial.println("      \\/            \\/               \\/ ");
+        Serial.println(".__                                         .__    .___");
+        Serial.println("|__| _____ _____________  _______  _______  |__| __| _/");
+        Serial.println("|  |/     \\\\____ \\_  __ \\/  _ \\  \\/ /\\__  \\ |  |/ __ | ");
+        Serial.println("|  |  Y Y  \\  |_> >  | \\(  <_> )   /  / __ \\|  / /_/ | ");
+        Serial.println("|__|__|_|  /   __/|__|   \\____/ \\_/  (____  /__\\____ | ");
+        Serial.println("         \\/|__|                           \\/        \\/ ");
+        Serial.println("                         __                ");
+        Serial.println("  _____ _____    _______/  |_  ___________ ");
+        Serial.println(" /     \\\\__  \\  /  ___/\\   __\\/ __ \\_  __ \\");
+        Serial.println("|  Y Y  \\/ __ \\_\\___ \\  |  | \\  ___/|  | \\/");
+        Serial.println("|__|_|  (____  /____  > |__|  \\___  >__|   ");
+        Serial.println("      \\/     \\/     \\/            \\/       ");
+        Serial.println("                   .___    .__          ");
+        Serial.println("  _____   ____   __| _/_ __|  |   ____  ");
+        Serial.println(" /     \\ /  _ \\ / __ |  |  \\  | _/ __ \\ ");
+        Serial.println("|  Y Y  (  <_> ) /_/ |  |  /  |_\\  ___/ ");
+        Serial.println("|__|_|  /\\____/\\____ |____/|____/\\___  >");
+        Serial.println("      \\/            \\/               \\/ ");
         Serial.println("Initializing...");
         vw_set_tx_pin(transmit_pin);
         vw_set_rx_pin(receive_pin);
@@ -83,19 +83,19 @@ void reset() {
 void setled(char a){
     switch(a){                                    //controls for changing LED status from remote
         case '1':
-        digitalWrite(led_pin1,HIGH);
+            digitalWrite(led_pin1,HIGH);
         break;
         case '2':
-        digitalWrite(led_pin2,HIGH);
+            digitalWrite(led_pin2,HIGH);
         break;
         case '3':
-        digitalWrite(led_pin3,HIGH);
+            digitalWrite(led_pin3,HIGH);
         break;
         case '4':
-        digitalWrite(led_pin4,HIGH);
+            digitalWrite(led_pin4,HIGH);
         break;
         case '5':
-        digitalWrite(led_pin5,HIGH);
+            digitalWrite(led_pin5,HIGH);
         break;
         case 'p': //cycle through values for part
             if(part == part0){
@@ -122,18 +122,18 @@ void setled(char a){
             }
         break;
         case '.':
-        power=1;
+            power=1;
         break;
         case ',':
-        power=0;
+            power=0;
         case '`':
-        reset();
+            reset();
         break;
         case '+':
-        sendchar('+');
+            sendchar('+');
         break;
         case 'c':
-        sendchar('c');
+            sendchar('c');
         break;
     }
 }
@@ -172,18 +172,18 @@ int ledblink(int counter){                                //blink events
     return counter;
 }
 void sendchar(char message){                                //sends a character 
-        char msg[1]={message};
-        vw_send((uint8_t *)msg,1);
-        vw_wait_tx();
-        Serial.print("Send: ");
-        Serial.print(message);
-        Serial.println("");
+    char msg[1]={message};
+    vw_send((uint8_t *)msg,1);
+    vw_wait_tx();
+    Serial.print("Send: ");
+    Serial.print(message);
+    Serial.println("");
 }
 void recvchar(char message){                                //receives a character from serial monitor or RFreceiver
-        Serial.print("Rec : ");
-        Serial.write(message);
-        Serial.println("");
-        setled(message);
+    Serial.print("Rec : ");
+    Serial.write(message);
+    Serial.println("");
+    setled(message);
 }
 char msg[1] = {};
 void loop() {
