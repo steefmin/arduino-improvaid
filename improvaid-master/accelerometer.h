@@ -10,9 +10,9 @@ void accinit(int groundpin,int powerpin) {
 }
 int accmap(int pin, int zpin){
   if(pin==zpin){
-      return map(analogRead(pin),0,720,0,1023);
+      return map(analogRead(pin),0,720,-1000,1000);
   }else{
-      return map(analogRead(pin),0,720,0,1023);
+      return map(analogRead(pin),0,720,-1000,1000);
   }
 }
   

@@ -42,6 +42,8 @@ const int led_pin3=5;
 const int led_pin4=6;
 const int led_pin5=7;
 
+int maximum = 0;
+
 void setup(){
     //enable chat
         Serial.begin(9600);                             // Start serial monitor connection
@@ -80,6 +82,7 @@ void setup(){
         pinMode(led_pin4,OUTPUT);
         pinMode(led_pin5,OUTPUT);
         reset();
+        delay(500);
         Serial.println("Ready");
 }
 void reset() {
@@ -231,6 +234,12 @@ void loop() {
       setled('2');
       Serial.println(eval1);
       accread(xpin,ypin,zpin,calibx,caliby,calibz);
+  }
+  if(eval1>maximum){
+    Serial.print("max: ");
+    Serial.print(eval1);
+    Serial.println("");
+    maximum = eval1;
   }
 }
 
