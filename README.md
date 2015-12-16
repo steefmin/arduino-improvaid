@@ -1,3 +1,6 @@
+#Stil in development, not ready for production
+
+
 # Improvaid modules
 Software for the wrist, master and slave modules developed during the Living Technology Project Semester at Saxion. 
 
