@@ -33,20 +33,42 @@ const int led_pin5=7;
 
 void setup(){
     //enable chat
+        Serial.begin(9600);                             // Start serial monitor connection
+Serial.println(".__                                         .__    .___");
+Serial.println("|__| _____ _____________  _______  _______  |__| __| _/");
+Serial.println("|  |/     \\\\____ \\_  __ \\/  _ \\  \\/ /\\__  \\ |  |/ __ | ");
+Serial.println("|  |  Y Y  \\  |_> >  | \\(  <_> )   /  / __ \\|  / /_/ | ");
+Serial.println("|__|__|_|  /   __/|__|   \\____/ \\_/  (____  /__\\____ | ");
+Serial.println("         \\/|__|                           \\/        \\/ ");
+Serial.println("                         __                ");
+Serial.println("  _____ _____    _______/  |_  ___________ ");
+Serial.println(" /     \\\\__  \\  /  ___/\\   __\\/ __ \\_  __ \\");
+Serial.println("|  Y Y  \\/ __ \\_\\___ \\  |  | \\  ___/|  | \\/");
+Serial.println("|__|_|  (____  /____  > |__|  \\___  >__|   ");
+Serial.println("      \\/     \\/     \\/            \\/       ");
+Serial.println("                   .___    .__          ");
+Serial.println("  _____   ____   __| _/_ __|  |   ____  ");
+Serial.println(" /     \\ /  _ \\ / __ |  |  \\  | _/ __ \\ ");
+Serial.println("|  Y Y  (  <_> ) /_/ |  |  /  |_\\  ___/ ");
+Serial.println("|__|_|  /\\____/\\____ |____/|____/\\___  >");
+Serial.println("      \\/            \\/               \\/ ");
+        Serial.println("Initializing...");
         vw_set_tx_pin(transmit_pin);
         vw_set_rx_pin(receive_pin);
         vw_set_ptt_pin(transmit_en_pin);
         vw_set_ptt_inverted(true);                      // Required for DR3100
         vw_setup(2000);                                 // Bits per sec
-        Serial.begin(9600);                             // Start serial monitor connection
         vw_rx_start();                                  // Start receiver
+        
     //enable LED's
+        Serial.println("Resetting outputs...");
         pinMode(led_pin1,OUTPUT);
         pinMode(led_pin2,OUTPUT);
         pinMode(led_pin3,OUTPUT);
         pinMode(led_pin4,OUTPUT);
         pinMode(led_pin5,OUTPUT);
         reset();
+        Serial.println("Ready");
 }
 void reset() {
     digitalWrite(led_pin1,LOW);
@@ -74,9 +96,6 @@ void setled(char a){
         break;
         case '5':
         digitalWrite(led_pin5,HIGH);
-        break;
-        case '`':
-        reset();
         break;
         case 'p': //cycle through values for part
             if(part == part0){
@@ -107,6 +126,14 @@ void setled(char a){
         break;
         case ',':
         power=0;
+        case '`':
+        reset();
+        break;
+        case '+':
+        sendchar('+');
+        break;
+        case 'c':
+        sendchar('c');
         break;
     }
 }
@@ -149,26 +176,28 @@ void sendchar(char message){                                //sends a character
         vw_send((uint8_t *)msg,1);
         vw_wait_tx();
         Serial.print("Send: ");
+        Serial.print(message);
+        Serial.println("");
+}
+void recvchar(char message){                                //receives a character from serial monitor or RFreceiver
+        Serial.print("Rec : ");
         Serial.write(message);
         Serial.println("");
+        setled(message);
 }
 char msg[1] = {};
 void loop() {
     // Send the serial input
     if (Serial.available() > 0) {
         incomingByte = Serial.read();
-        if(incomingByte != '\n'){
-          sendchar(incomingByte);
-          setled(incomingByte);
+        if(incomingByte != '\n' && incomingByte != 13){
+            recvchar(incomingByte);
         }
     }
     // Read the received data
     vw_wait_rx_max(100); //delay needed, otherwise to little time to receive 
     if (vw_get_message(buf, &buflen)){
-        Serial.print("Rec :");
-        Serial.write(buf[0]);
-        Serial.println("");
-        setled(buf[0]);
+        recvchar(buf[0]);
     }
     // change output when time is exceeded
     unsigned long currentMillis = millis();
