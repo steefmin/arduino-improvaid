@@ -17,9 +17,9 @@ unsigned long previousMillis = 0;
 int counter=0;
 
 //chat functionality
-const int transmit_pin = 12;                            // connect to transmitter
+const int transmit_pin = 12;                           // connect to transmitter
 const int receive_pin = 8;                             // connect to receiver
-const int transmit_en_pin = 2;
+const int transmit_en_pin = 2;                         // don't know if needed, but works
 uint8_t buf[VW_MAX_MESSAGE_LEN];
 uint8_t buflen = VW_MAX_MESSAGE_LEN;
 int incomingByte = 0;
@@ -59,7 +59,7 @@ void reset() {
     interval = interval0;
 }
 void setled(char a){
-    switch(a){
+    switch(a){                                    //controls for changing LED status from remote
         case '1':
         digitalWrite(led_pin1,HIGH);
         break;
@@ -111,7 +111,7 @@ void setled(char a){
     }
 }
 
-int updatetime(double part, int interval, int counter){
+int updatetime(double part, int interval, int counter){  //sets the time until next blink event
     if(counter%2==0){
         testtime = part*interval;
     }else if(counter%2==1){
@@ -122,7 +122,7 @@ int updatetime(double part, int interval, int counter){
     return testtime;
 }
 
-int ledblink(int counter){
+int ledblink(int counter){                                //blink events
     if(counter==0){
         digitalWrite(led_pin1, HIGH);
         counter++;
@@ -144,7 +144,7 @@ int ledblink(int counter){
     }
     return counter;
 }
-void sendchar(char message){
+void sendchar(char message){                                //sends a character 
         char msg[1]={message};
         vw_send((uint8_t *)msg,1);
         vw_wait_tx();
@@ -157,8 +157,10 @@ void loop() {
     // Send the serial input
     if (Serial.available() > 0) {
         incomingByte = Serial.read();
-        sendchar(incomingByte);
-        setled(incomingByte);
+        if(incomingByte != '\n'){
+          sendchar(incomingByte);
+          setled(incomingByte);
+        }
     }
     // Read the received data
     vw_wait_rx_max(100); //delay needed, otherwise to little time to receive 
@@ -168,6 +170,7 @@ void loop() {
         Serial.println("");
         setled(buf[0]);
     }
+    // change output when time is exceeded
     unsigned long currentMillis = millis();
     if(currentMillis - previousMillis >= testtime && power==1){
         previousMillis = currentMillis;
@@ -175,3 +178,4 @@ void loop() {
         counter = ledblink(counter);
     }
 }
+
