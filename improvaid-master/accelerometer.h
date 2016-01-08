@@ -10,7 +10,7 @@ void accinit(int groundpin,int powerpin) {
 }
 int accmap(int pin, int zpin){
   if(pin==zpin){
-      return map(analogRead(pin),0,720,-1000,1000);
+      return map(analogRead(pin),0,600,-1000,1000);
   }else{
       return map(analogRead(pin),0,720,-1000,1000);
   }
@@ -30,9 +30,9 @@ void accread(int xpin, int ypin, int zpin, int calibx, int caliby, int calibz) {
   // delay before next reading:
 }
 int accvalue(int xpin, int ypin, int zpin, int calibx, int caliby, int calibz){
-  int x=analogRead(xpin)-calibx;
-  int y=analogRead(ypin)-caliby;
-  int z=analogRead(zpin)-calibz;
+  int x=accmap(xpin,zpin)-calibx;
+  int y=accmap(ypin,zpin)-caliby;
+  int z=accmap(zpin,zpin)-calibz;
   int value = round(sqrt(x^2+y^2+z^2));
 
   return value;

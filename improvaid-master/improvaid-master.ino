@@ -61,9 +61,9 @@ void setup(){
     //initialize accelerometer
         accinit(groundpin, powerpin);
         delay(1000);
-        calibx = 360;
-        caliby = 360;
-        calibz = 360;
+        calibx = accmap(xpin,zpin);
+        caliby = accmap(ypin,zpin);
+        calibz = accmap(zpin,zpin);
         calibxyz = sqrt(3*360^2);
         Serial.print("Accelerometer calibrated: x=");
         Serial.print(calibx);
