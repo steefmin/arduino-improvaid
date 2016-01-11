@@ -1,5 +1,9 @@
 #include <VirtualWire.h> // Download at https://www.pjrc.com/teensy/td_libs_VirtualWire.html
 #include "accelerometer.h"
+//step detection 
+boolean beweegt = false; 
+unsigned long begin_beweging=0;
+
 //accelerometer functionality
 const int groundpin = 14;             // analog input pin 4 -- ground
 const int powerpin = 18;              // analog input pin 5 -- voltage
@@ -7,7 +11,6 @@ const int xpin = A3;                  // x-axis of the accelerometer
 const int ypin = A2;                  // y-axis
 const int zpin = A1;                  // z-axis (only on 3-axis models)
 int calibxyz=100;
-
 
 //left-right oscillation functionality
 double part=0.5;
@@ -205,13 +208,23 @@ void loop() {
         counter = ledblink(counter);
     }
 
-  accread(xpin,ypin,zpin);
   float eval1=accvalue(xpin,ypin,zpin,calibxyz);
-  if(eval1>10){
+  if(eval1>3){
       setled('3');
       Serial.println(eval1);
+      if(beweegt==false){
+        beweegt = true;
+        begin_beweging = millis();
+        Serial.println("eerste beweging");
+      }
+      unsigned long tijd_nu = millis();
+      if(beweegt == true && (tijd_nu - begin_beweging) >=5000){
+        power = 1;
+      }
+  }else{
+    beweegt = false; 
+    Serial.println("gestopt met lopen voordat 5sec voorbij");
   }
   
-  //
 }
 

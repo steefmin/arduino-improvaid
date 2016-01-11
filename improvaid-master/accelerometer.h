@@ -10,7 +10,7 @@ void accinit(int groundpin,int powerpin) {
 }
 
 float accmap(int pin, int xpin, int ypin, int zpin){
-  int samples = 50;
+  int samples = 10;
   float value = 0;
   for(int i=1; i<=samples; i++){
     value = value + analogRead(pin);
